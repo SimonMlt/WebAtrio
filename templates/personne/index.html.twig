@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Personnes{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Personnes</h1>
+
+    <table>
+        <tr>
+            <td>Nom</td>
+            <td>Prénom</td>
+            <td>Date de naissance</td>
+        </tr>
+    {% for personne in personnes %}
+        <tr>
+            <td>{{ personne.nom }}</td>
+            <td>{{ personne.prenom }}</td>
+            <td>{{ personne.dateNaissance|date('d/m/Y') }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}
