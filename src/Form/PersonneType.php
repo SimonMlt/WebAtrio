@@ -56,11 +56,6 @@ class PersonneType extends AbstractType
                     'class' => 'form-label mt-4'
                 ],
                 'widget' => 'single_text',
-                'constraints' => [
-                    new Assert\GreaterThan('-150 years'),
-                    new Assert\LessThan('today'),
-                    new Assert\NotNull()
-                ]
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
