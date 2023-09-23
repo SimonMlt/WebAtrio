@@ -13,13 +13,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PersonneController extends AbstractController
 {
-    #[Route('/personne', name: 'app_personne')]
+    #[Route('/personne', 'personne.index', methods: ['GET'])]
     public function index(PersonneRepository $repository): Response
     {
-        $personnes = $repository->findAll();
+        $personnes = $repository->findBy(array(), array('nom' => 'ASC', 'prenom' => 'ASC'));
 
         return $this->render('personne/index.html.twig', [
-            'personnes' => $personnes
+            'personnes' => $personnes,
+            
         ]);
     }
 
@@ -35,6 +36,13 @@ class PersonneController extends AbstractController
             $personne = $form->getData();
             $manager->persist($personne);
             $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Personne insérée avec succès !'
+            );
+
+            return $this->redirectToRoute('personne.index');
         }
         
         return $this->render('personne/new.html.twig', [

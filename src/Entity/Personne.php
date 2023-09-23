@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PersonneRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 class Personne
@@ -15,12 +16,19 @@ class Personne
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 1, max: 255)]
+    #[Assert\NotBlank()]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 1, max: 255)]
+    #[Assert\NotBlank()]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull()]
+    #[Assert\GreaterThan('-150 years')]
+    #[Assert\LessThan('today')]
     private ?\DateTimeInterface $dateNaissance = null;
 
     public function getId(): ?int
@@ -50,6 +58,15 @@ class Personne
         $this->prenom = $prenom;
 
         return $this;
+    }
+
+    public function getAge()
+    {
+        $now = new \DateTime('now');
+        $age = $this->getDateNaissance();
+        $difference = $now->diff($age);
+
+        return $difference->format('%y ans');
     }
 
     public function getDateNaissance(): ?\DateTimeInterface
